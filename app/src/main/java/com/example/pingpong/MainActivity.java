@@ -3,10 +3,14 @@ package com.example.pingpong;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
@@ -19,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ConstraintLayout layout = findViewById(R.id.myLayout);
-        DrawView drawView = new DrawView(this);
+        Game game = new Game();
+        DrawView drawView = new DrawView(this, game);
         layout.addView(drawView);
+
     }
 }

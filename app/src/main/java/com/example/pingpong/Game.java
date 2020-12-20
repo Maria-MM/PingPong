@@ -5,22 +5,21 @@ import android.os.SystemClock;
 import android.widget.Toast;
 
 public class Game {
-    final static int BALL_RADIUS = 70;
-    final static int PADDLE_WIDTH = 400;
-    final static int PADDLE_HEIGHT = 100;
-    final static int ACCELERATION_FACTOR = 10;
-    final static double SPEED_FACTOR = 1000;
-    int firstPlayerOffset = 0;
-    int secondPlayerOffset = 0;
+    final static float BALL_RADIUS = 0.05f; //in terms of width
+    final static float PADDLE_WIDTH = 0.3f; //in terms of width
+    final static float PADDLE_HEIGHT = 0.05f; //in terms of height
+    final static float ACCELERATION_FACTOR = 0.0005f;
+    final static float SPEED_FACTOR = 0.5f;
+    float firstPlayerOffset = 0;
+    float secondPlayerOffset = 0;
     int firstPlayerScore = 0;
     int secondPlayerScore = 0;
-    double acceleration[] = {ACCELERATION_FACTOR, ACCELERATION_FACTOR};
-    double speed[] = {0.0, SPEED_FACTOR};
-    double current_speed[] = {0.0, SPEED_FACTOR};
-    double initial_position[] = {0.0, 0.0};
+    float acceleration[] = {ACCELERATION_FACTOR, ACCELERATION_FACTOR};
+    float speed[] = {0.0f, SPEED_FACTOR};
+    float current_speed[] = {0.0f, SPEED_FACTOR};
+    float initial_position[] = {0.5f, 0.5f};
     Boolean isInitialised = false;
     long start, current;
-    int width, height;
 
     public Game(){
         startMoving();
@@ -42,7 +41,7 @@ public class Game {
     }
 
     void startMoving(){
-        speed[0] = (-1.0 + 2 * Math.random())*SPEED_FACTOR;
+        speed[0] = (float) ((-1.0f + 2 * Math.random())*SPEED_FACTOR);
         double upDownDesider = Math.random();
         if(upDownDesider >= 0.5){
             speed[1] = -SPEED_FACTOR;
@@ -56,11 +55,10 @@ public class Game {
     void restartTime(){
         start = SystemClock.uptimeMillis();
     }
-
-    int[] getPosition(){
+    float[] getPosition(){
         if(!isInitialised){
-            initial_position[0] = width/2;
-            initial_position[1] = height/2;
+            initial_position[0] = 0.5f;
+            initial_position[1] = 0.5f;
             isInitialised = true;
         }
         current = SystemClock.uptimeMillis();
@@ -68,18 +66,18 @@ public class Game {
         //System.out.println("current time is" + String.valueOf(current));
         //System.out.println("start time is" + String.valueOf(start));
         //System.out.println("Time = " + String.valueOf(time));
-        current_speed[0] = speed[0] + acceleration[0] * time;
-        current_speed[1] = speed[1] + acceleration[1] * time;
-        int x = (int)(initial_position[0] + speed[0]*time + acceleration[0]*time*time/2);
-        int y = (int)(initial_position[1] + speed[1]*time + acceleration[1]*time*time/2);
+        current_speed[0] = (float) (speed[0] + acceleration[0] * time);
+        current_speed[1] = (float) (speed[1] + acceleration[1] * time);
+        float x = (float) (initial_position[0] + speed[0]*time + acceleration[0]*time*time/2);
+        float y = (float) (initial_position[1] + speed[1]*time + acceleration[1]*time*time/2);
         //System.out.println("Speed is (" + String.valueOf(speed[0]) + ", " + String.valueOf(speed[1]) + ")");
 
         if(y <= PADDLE_HEIGHT + BALL_RADIUS){
             y = PADDLE_HEIGHT + BALL_RADIUS;
-            if(x >= width/2 - PADDLE_WIDTH/2 + firstPlayerOffset - BALL_RADIUS &&
-                    x <= width/2 + PADDLE_WIDTH/2 + firstPlayerOffset + BALL_RADIUS){
+            if(x >= 0.5f - PADDLE_WIDTH/2 + firstPlayerOffset - BALL_RADIUS &&
+                    x <= 0.5f + PADDLE_WIDTH/2 + firstPlayerOffset + BALL_RADIUS){
                 speed = current_speed;
-                speed[1] *= -1.0;
+                speed[1] *= -1.0f;
                 check_acceleration();
                 initial_position[0] = x;
                 initial_position[1] = y;
@@ -90,12 +88,12 @@ public class Game {
                 startMoving();
             }
         }
-        else if (y >= height - PADDLE_HEIGHT - BALL_RADIUS){
-            y = height - PADDLE_HEIGHT - BALL_RADIUS;
-            if(x >= width/2 - PADDLE_WIDTH/2 + secondPlayerOffset - BALL_RADIUS &&
-                    x <= width/2 + PADDLE_WIDTH/2 + secondPlayerOffset + BALL_RADIUS){
+        else if (y >= 1.0f - PADDLE_HEIGHT - BALL_RADIUS){
+            y = 1.0f - PADDLE_HEIGHT - BALL_RADIUS;
+            if(x >= 0.5f - PADDLE_WIDTH/2 + secondPlayerOffset - BALL_RADIUS &&
+                    x <= 0.5f + PADDLE_WIDTH/2 + secondPlayerOffset + BALL_RADIUS){
                 speed = current_speed;
-                speed[1] *= -1.0;
+                speed[1] *= -1.0f;
                 check_acceleration();
                 initial_position[0] = x;
                 initial_position[1] = y;
@@ -111,20 +109,20 @@ public class Game {
             initial_position[0] = x;
             initial_position[1] = y;
             speed = current_speed;
-            speed[0] *= -1.0;
+            speed[0] *= -1.0f;
             check_acceleration();
             restartTime();
         }
-        else if(x >= width - BALL_RADIUS){
-            x = width - BALL_RADIUS;
+        else if(x >= 1.0f - BALL_RADIUS){
+            x = 1.0f - BALL_RADIUS;
             initial_position[0] = x;
             initial_position[1] = y;
             speed = current_speed;
-            speed[0] *= -1.0;
+            speed[0] *= -1.0f;
             check_acceleration();
             restartTime();
         }
-        int[] result = {x, y};
+        float[] result = {x, y};
         return result;
     }
 
