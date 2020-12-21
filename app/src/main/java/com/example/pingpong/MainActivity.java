@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         client.execute();
     }
     class Client extends AsyncTask<Void, Void, Void> {
-        String dstAddress = "192.168.100.4"; // adres IP serwera
+        //String dstAddress = "192.168.100.4"; // adres IP serwera
+        String dstAddress = "192.168.100.5";
+        //String dstAddress = "10.0.2.2";
         int dstPort = 8080;
         String response = "TU BĘDZIE WIADOMOŚĆ Z SERWERA";
         String previousOutMsg = "", currentOutMsg = "";
@@ -45,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 while(true){
-                    System.out.println("Started new cycle!");
-                    System.out.println("Try to create socket!");
                     socket = new Socket(dstAddress, dstPort);
-                    System.out.println("created!");
+                    game.isStarted = true;
                     ByteArrayOutputStream byteArrayOutputStream = new
                             ByteArrayOutputStream(1024);
                     byte[] buffer = new byte[1024];
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         out.println(currentOutMsg);
                         System.out.println(currentOutMsg);
                         previousOutMsg = currentOutMsg;
-                        Thread.sleep(250);
+                        //Thread.sleep(250);
                         while ((bytesRead = inputStream.read(buffer)) != -1) {
                             byteArrayOutputStream.write(buffer, 0, bytesRead);
                             response = byteArrayOutputStream.toString("UTF-8");

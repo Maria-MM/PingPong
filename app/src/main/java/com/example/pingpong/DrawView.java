@@ -31,7 +31,7 @@ public class DrawView extends View {
         // draw ball
         paint.setARGB(255, 255, 255, 255);
         //System.out.println("position is (" + String.valueOf(game.getPosition()[0]) + ", " + String.valueOf(game.getPosition()[1]) +  ")");
-        int[] ball_position = floatToInt(game.getBallPosition());
+        int[] ball_position = floatToInt(game.getPosition());
         canvas.drawCircle(ball_position[0], ball_position[1], (float) (game.BALL_RADIUS * width), paint);
         // draw paddle 1
         paint.setARGB(255, 255, 0, 0);

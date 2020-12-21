@@ -18,12 +18,12 @@ public class Game {
     float speed[] = {0.0f, SPEED_FACTOR};
     float current_speed[] = {0.0f, SPEED_FACTOR};
     float initial_position[] = {0.5f, 0.5f};
-    Boolean isInitialised = false;
+    Boolean isInitialised = true, isStarted = false;
     float[] curBallPosition = {0.5f, 0.5f};
     long start, current;
 
     public Game(){
-        startMoving();
+
     }
 
     void check_acceleration(){
@@ -41,11 +41,19 @@ public class Game {
         }
     }
 
+    void updateTime(){
+        check_acceleration();
+        restartTime();
+    }
+
     void startMoving(){
-        speed[0] = (float) ((-1.0f + 2 * Math.random())*SPEED_FACTOR);
-        double upDownDesider = Math.random();
-        if(upDownDesider >= 0.5){
+        speed[0] = 0.0f;
+
+        if(firstPlayerScore >= secondPlayerScore){
             speed[1] = -SPEED_FACTOR;
+        }
+        else{
+            speed[1] = SPEED_FACTOR;
         }
         check_acceleration();
         restartTime();
@@ -56,7 +64,11 @@ public class Game {
     void restartTime(){
         start = SystemClock.uptimeMillis();
     }
-    /*float[] getPosition(){
+    float[] getPosition(){
+        float[] result = {0.5f, 0.5f};
+        if(!isStarted){
+            return result;
+        }
         if(!isInitialised){
             initial_position[0] = 0.5f;
             initial_position[1] = 0.5f;
@@ -64,9 +76,7 @@ public class Game {
         }
         current = SystemClock.uptimeMillis();
         double time = (current - start)*0.001;
-        //System.out.println("current time is" + String.valueOf(current));
-        //System.out.println("start time is" + String.valueOf(start));
-        //System.out.println("Time = " + String.valueOf(time));
+
         current_speed[0] = (float) (speed[0] + acceleration[0] * time);
         current_speed[1] = (float) (speed[1] + acceleration[1] * time);
         float x = (float) (initial_position[0] + speed[0]*time + acceleration[0]*time*time/2);
@@ -85,7 +95,6 @@ public class Game {
                 restartTime();
             }
             else{
-                secondPlayerScore += 1;
                 startMoving();
             }
         }
@@ -101,7 +110,6 @@ public class Game {
                 restartTime();
             }
             else{
-                firstPlayerScore += 1;
                 startMoving();
             }
         }
@@ -123,9 +131,9 @@ public class Game {
             check_acceleration();
             restartTime();
         }
-        float[] result = {x, y};
+        result = new float[]{x, y};
         return result;
-    }*/
+    }
 
     float[] getBallPosition(){
         return curBallPosition;
@@ -141,11 +149,36 @@ public class Game {
         for(String str : tokens){
             System.out.println(str);
         }
+        int len = tokens.length;
         firstPlayerOffset = -Float.parseFloat(tokens[0]);
-        curBallPosition[0] = 1.0f - Float.parseFloat(tokens[1]);
-        curBallPosition[1] = 1.0f - Float.parseFloat(tokens[2]);
-        secondPlayerScore = Integer.parseInt(tokens[3]);
-        firstPlayerScore = Integer.parseInt(tokens[4]);
+        initial_position[0] = 1.0f - Float.parseFloat(tokens[1]);
+        initial_position[1] = 1.0f - Float.parseFloat(tokens[2]);
+        if(len > 3)
+        {
+            float speedX = Float.parseFloat(tokens[3]);
+            speed[0] = -speedX;
+            current_speed[0] = -speedX;
+        }
+        if(len > 4){
+            float speedY = Float.parseFloat(tokens[4]);
+            speed[1] = -speedY;
+            current_speed[1] = -speedY;
+        }
+        if(len > 5)
+        {
+            int new_score = Integer.parseInt(tokens[5]);
+            if(new_score > secondPlayerScore){
+                secondPlayerScore = new_score;
+            }
+        }
+        if(len > 6){
+            int new_score = Integer.parseInt(tokens[6]);
+            if(new_score > firstPlayerScore){
+                firstPlayerScore = new_score;
+            }
+        }
+
+        updateTime();
     }
 
 }
