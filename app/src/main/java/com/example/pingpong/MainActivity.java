@@ -42,18 +42,19 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             Socket socket = null;
             try {
-                System.out.println("Try to create socket!");
-                socket = new Socket(dstAddress, dstPort);
-                System.out.println("created!");
-                ByteArrayOutputStream byteArrayOutputStream = new
-                        ByteArrayOutputStream(1024);
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                InputStream inputStream = socket.getInputStream();
-                OutputStream outputStream = socket.getOutputStream();
+
 
                 while(true){
                     System.out.println("Started new cycle!");
+                    System.out.println("Try to create socket!");
+                    socket = new Socket(dstAddress, dstPort);
+                    System.out.println("created!");
+                    ByteArrayOutputStream byteArrayOutputStream = new
+                            ByteArrayOutputStream(1024);
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    InputStream inputStream = socket.getInputStream();
+                    OutputStream outputStream = socket.getOutputStream();
                     currentOutMsg = String.valueOf(game.getMyOffset());
                     out = new PrintWriter(new BufferedWriter(
                             new OutputStreamWriter(outputStream)), true);
@@ -61,14 +62,16 @@ public class MainActivity extends AppCompatActivity {
                         out.println(currentOutMsg);
                         System.out.println(currentOutMsg);
                         previousOutMsg = currentOutMsg;
+                        Thread.sleep(250);
                         while ((bytesRead = inputStream.read(buffer)) != -1) {
                             byteArrayOutputStream.write(buffer, 0, bytesRead);
                             response = byteArrayOutputStream.toString("UTF-8");
                             System.out.println(response);
                             game.updateGameState(response);
-                            // send the message to the server
                         }
+
                     //}
+                    socket.close();
                 }
 
             } catch (Exception e) { e.printStackTrace(); }
