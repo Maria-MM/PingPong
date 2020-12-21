@@ -19,6 +19,7 @@ public class Game {
     float current_speed[] = {0.0f, SPEED_FACTOR};
     float initial_position[] = {0.5f, 0.5f};
     Boolean isInitialised = false;
+    float[] curBallPosition = {0.5f, 0.5f};
     long start, current;
 
     public Game(){
@@ -55,7 +56,7 @@ public class Game {
     void restartTime(){
         start = SystemClock.uptimeMillis();
     }
-    float[] getPosition(){
+    /*float[] getPosition(){
         if(!isInitialised){
             initial_position[0] = 0.5f;
             initial_position[1] = 0.5f;
@@ -124,6 +125,27 @@ public class Game {
         }
         float[] result = {x, y};
         return result;
+    }*/
+
+    float[] getBallPosition(){
+        return curBallPosition;
+    }
+
+    float getMyOffset(){
+        return secondPlayerOffset;
+    }
+
+    void updateGameState(String s){
+        String[] tokens = s.split("\\|");
+        System.out.println("tokens size is " + String.valueOf(tokens.length));
+        for(String str : tokens){
+            System.out.println(str);
+        }
+        firstPlayerOffset = -Float.parseFloat(tokens[0]);
+        curBallPosition[0] = 1.0f - Float.parseFloat(tokens[1]);
+        curBallPosition[1] = 1.0f - Float.parseFloat(tokens[2]);
+        secondPlayerScore = Integer.parseInt(tokens[3]);
+        firstPlayerScore = Integer.parseInt(tokens[4]);
     }
 
 }

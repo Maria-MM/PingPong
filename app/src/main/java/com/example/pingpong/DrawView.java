@@ -30,8 +30,8 @@ public class DrawView extends View {
         canvas.drawRect(0,0, width, height, paint);
         // draw ball
         paint.setARGB(255, 255, 255, 255);
-        System.out.println("position is (" + String.valueOf(game.getPosition()[0]) + ", " + String.valueOf(game.getPosition()[1]) +  ")");
-        int[] ball_position = floatToInt(game.getPosition());
+        //System.out.println("position is (" + String.valueOf(game.getPosition()[0]) + ", " + String.valueOf(game.getPosition()[1]) +  ")");
+        int[] ball_position = floatToInt(game.getBallPosition());
         canvas.drawCircle(ball_position[0], ball_position[1], (float) (game.BALL_RADIUS * width), paint);
         // draw paddle 1
         paint.setARGB(255, 255, 0, 0);
@@ -56,10 +56,10 @@ public class DrawView extends View {
                 for (int p = 0; p < pointerCount; p++) {
                     float x = event.getX(p);
                     float y = event.getY(p);
-                    if (y <= game.PADDLE_HEIGHT * height * 2 && y >= 0) {
+                    /*if (y <= game.PADDLE_HEIGHT * height * 2 && y >= 0) {
                         game.firstPlayerOffset = Math.max(Math.min((int)(x - width/2),
                                 (width - game.PADDLE_WIDTH * width)/2), - (width - game.PADDLE_WIDTH * width)/2) / width;
-                    } else if (y <= height && y >= height - game.PADDLE_HEIGHT * height * 2){
+                    } else */if (y <= height && y >= height - game.PADDLE_HEIGHT * height * 2){
                         game.secondPlayerOffset = Math.max(Math.min((int)(x - width/2),
                                 (width - game.PADDLE_WIDTH * width)/2), -(width - game.PADDLE_WIDTH * width)/2) / width;
                     }
